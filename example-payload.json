@@ -1,0 +1,14 @@
+{
+  "name": "Lançamento do Produto X",
+  "objective": "Gerar 500 leads qualificados em 30 dias",
+  "targetAudience": {
+    "ageRange": "25-40",
+    "interests": ["tecnologia", "produtividade", "SaaS"],
+    "geo": "Brasil"
+  },
+  "budget": 5000,
+  "duration": "30 dias",
+  "channels": ["facebook", "instagram", "email"],
+  "tone": "informal",
+  "extraContext": "O produto é um SaaS B2B com trial de 14 dias."
+}
