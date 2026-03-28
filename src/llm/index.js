@@ -4,9 +4,14 @@ const openai = require("./openai");
 async function generateCampaignScript(campaignPayload) {
   // Monta prompt/base para a LLM
   const prompt = buildPrompt(campaignPayload);
-  const llmResponse = await openai.callLLM(prompt, { maxTokens: 800 });
-  // Interpretar resposta conforme formato esperado
-  return llmResponse;
+  try {
+    const llmResponse = await openai.callLLM(prompt, { maxTokens: 800 });
+    // Interpretar resposta conforme formato esperado
+    return llmResponse;
+  } catch (err) {
+    // Fallback: retorna um roteiro padrão
+    return fallbackScript(campaignPayload);
+  }
 }
 
 function buildPrompt(payload) {
@@ -26,6 +31,22 @@ Contexto extra: ${payload.extraContext || "nenhum"}
 
 Gere o roteiro em português, claro e estruturado.
   `.trim();
+}
+
+function fallbackScript(payload) {
+  return `Título: ${payload.name || "Campanha de Marketing"}
+Objetivo: ${payload.objective || "Alcançar o público-alvo e gerar resultados."}
+Público-alvo: ${payload.targetAudience ? JSON.stringify(payload.targetAudience) : "Não informado"}
+Mensagem principal: Descubra os benefícios do nosso produto/serviço!
+Canais: ${payload.channels ? payload.channels.join(", ") : "A definir"}
+Cronograma:
+- Semana 1: Planejamento e criação de peças
+- Semana 2: Lançamento nas redes sociais e e-mail
+- Semana 3: Monitoramento e ajustes
+- Semana 4: Relatório de resultados
+Sugestões de criativos: Imagens chamativas, textos curtos e objetivos, CTA: "Saiba mais"
+KPIs: Alcance, cliques, leads gerados, conversões
+Recomendações finais: Acompanhe os resultados diariamente e ajuste a estratégia conforme necessário.`;
 }
 
 module.exports = { generateCampaignScript };
